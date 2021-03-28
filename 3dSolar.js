@@ -36,24 +36,35 @@ function main() {
     objects.push(sunMesh);
 
     const earthOrbit = new THREE.Object3D();
-    earthOrbit.position.z = 30;
     solarSystem.add(earthOrbit);
     objects.push(earthOrbit);
 
     const earthMaterial = new THREE.MeshPhongMaterial({color: 0x2233FF, emissive: 0x112244});
     const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
+    earthMesh.position.z = 30;
     earthOrbit.add(earthMesh);
     objects.push(earthMesh);
 
     const moonOrbit = new THREE.Object3D();
-    moonOrbit.position.z = 5;
-    earthOrbit.add(moonOrbit);
+    earthMesh.add(moonOrbit);
     
     const moonMaterial = new THREE.MeshPhongMaterial({color: 0x888888, emissive: 0x222222});
     const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    moonMesh.position.z = 5;
     moonMesh.scale.set(.5, .5, .5);
     moonOrbit.add(moonMesh);
     objects.push(moonMesh);
+
+    const marsOrbit = new THREE.Object3D();
+    solarSystem.add(marsOrbit);
+    objects.push(marsOrbit);
+
+    const marsMaterial = new THREE.MeshPhongMaterial({color: 0xE27B58, emissive: 0x112244});
+    const marsMesh = new THREE.Mesh(sphereGeometry, marsMaterial);
+    marsMesh.position.z = 50;
+    marsMesh.scale.set(.75, .75, .75);
+    marsOrbit.add(marsMesh);
+    objects.push(marsMesh);
 
     const color = 0xFFFFFF;
     const intensity = 3;
@@ -80,12 +91,16 @@ function main() {
         camera.updateProjectionMatrix();
         }
 
-        solarSystem.rotation.x = -time/4;
+        //solarSystem.rotation.x = -time/4;
         sunMesh.rotation.x = -time;
-        earthMesh.rotation.x = -time;
-        earthOrbit.rotation.x = -time*4;
-        moonMesh.rotation.x = -time;
-        moonOrbit.rotation.x = -time;
+
+        earthOrbit.rotation.x = -time/4; 
+        earthMesh.rotation.x = -time*2;
+
+        moonOrbit.rotation.x = -time*4;
+
+        marsOrbit.rotation.x = -time/6;
+        marsMesh.rotation.x = -time*2;
 
         renderer.render(scene, camera);
 
