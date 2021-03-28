@@ -69,12 +69,12 @@ function main() {
     const deimosOrbit = new THREE.Object3D();
     marsMesh.add(deimosOrbit);
     
-    // const moonMaterial = new THREE.MeshPhongMaterial({color: 0x888888, emissive: 0x222222});
-    // const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
-    // moonMesh.position.z = 5;
-    // moonMesh.scale.set(.5, .5, .5);
-    // moonOrbit.add(moonMesh);
-    // objects.push(moonMesh);
+    const deimosMaterial = new THREE.MeshPhongMaterial({color: 0xE27B58, emissive: 0x222222});
+    const deimosMesh = new THREE.Mesh(sphereGeometry, deimosMaterial);
+    deimosMesh.position.z = 3;
+    deimosMesh.scale.set(.15, .15, .15);
+    deimosOrbit.add(deimosMesh);
+    objects.push(deimosMesh);
 
     const color = 0xFFFFFF;
     const intensity = 3;
@@ -111,6 +111,8 @@ function main() {
 
         marsOrbit.rotation.x = -time/6;
         marsMesh.rotation.x = -time*2;
+
+        deimosOrbit.rotation.x = -time*3;
 
         renderer.render(scene, camera);
 
