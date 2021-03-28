@@ -66,6 +66,16 @@ function main() {
     marsOrbit.add(marsMesh);
     objects.push(marsMesh);
 
+    const deimosOrbit = new THREE.Object3D();
+    marsMesh.add(deimosOrbit);
+    
+    // const moonMaterial = new THREE.MeshPhongMaterial({color: 0x888888, emissive: 0x222222});
+    // const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    // moonMesh.position.z = 5;
+    // moonMesh.scale.set(.5, .5, .5);
+    // moonOrbit.add(moonMesh);
+    // objects.push(moonMesh);
+
     const color = 0xFFFFFF;
     const intensity = 3;
     const light = new THREE.PointLight(color, intensity);
