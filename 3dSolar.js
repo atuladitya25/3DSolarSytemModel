@@ -1,4 +1,6 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/build/three.module.js';
+import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/controls/OrbitControls.js';
 
 function main() {
 
@@ -28,25 +30,49 @@ function main() {
     const solarSystem = new THREE.Object3D();
     scene.add(solarSystem);
     objects.push(solarSystem);
-        
-    const sunMaterial = new THREE.MeshPhongMaterial({emissive: 0xFFFF00});
-    const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
-    sunMesh.scale.set(5, 5, 5);  // make the sun large
-    solarSystem.add(sunMesh);
-    objects.push(sunMesh);
+
+    //const textureLoader = new THREE.TextureLoader();
+
+    //const glowMap = textureLoader.load("./resources/glow.png");
+
+    let sunMesh = new THREE.Object3D();
+    let earthLocale = new THREE.Object3D();
+    
+    const gltfLoader = new GLTFLoader();
+
+    gltfLoader.load('./resources/Sun_3D_Nasa.glb', (gltf) => {
+        sunMesh = gltf.scene;
+        sunMesh.scale.set(0.01, 0.01, 0.01); 
+        solarSystem.add(sunMesh);
+
+        // const spriteMaterial = new THREE.SpriteMaterial( 
+        //     { 
+        //         map: glowMap,
+        //         color: 0xfffa99, transparent: false, blending: THREE.AdditiveBlending
+        //     });
+        // const sprite = new THREE.Sprite( spriteMaterial );
+        // sprite.scale.set(100, 100, 100);
+        // solarSystem.add(sprite);
+    });
 
     const earthOrbit = new THREE.Object3D();
     solarSystem.add(earthOrbit);
     objects.push(earthOrbit);
 
-    const earthMaterial = new THREE.MeshPhongMaterial({color: 0x2233FF, emissive: 0x112244});
-    const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
-    earthMesh.position.z = 30;
-    earthOrbit.add(earthMesh);
-    objects.push(earthMesh);
+    let earthModel = new THREE.Object3D();
+
+    gltfLoader.load('./resources/Earth_3D_Nasa.glb', (gltf) => {
+        earthModel = gltf.scene;
+        earthModel.scale.set(0.0025, 0.0025, 0.0025);
+        earthLocale.add(earthModel);
+    });
+
+    earthLocale.position.z = 30;
+    earthOrbit.add(earthLocale);
+    objects.push(earthLocale);
 
     const moonOrbit = new THREE.Object3D();
-    earthMesh.add(moonOrbit);
+    earthLocale.add(moonOrbit);
     
     const moonMaterial = new THREE.MeshPhongMaterial({color: 0x888888, emissive: 0x222222});
     const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
@@ -77,7 +103,7 @@ function main() {
     objects.push(deimosMesh);
 
     const color = 0xFFFFFF;
-    const intensity = 3;
+    const intensity = 8;
     const light = new THREE.PointLight(color, intensity);
     scene.add(light);
 
@@ -105,7 +131,7 @@ function main() {
         sunMesh.rotation.x = -time;
 
         earthOrbit.rotation.x = -time/4; 
-        earthMesh.rotation.x = -time*2;
+        earthModel.rotation.x = -time*2;
 
         moonOrbit.rotation.x = -time*4;
 
