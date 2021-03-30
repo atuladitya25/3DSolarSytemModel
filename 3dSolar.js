@@ -11,14 +11,14 @@ function main() {
     const fov = 40;
     const aspect = 2;  // the canvas default
     const near = 0.1;
-    const far = 1000;
+    const far = 2000;
     const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
     const controls = new OrbitControls(camera, canvas);
     controls.update();
 
-    camera.position.set(0, 0, 140);
-    camera.up.set(0, 0, 1);
+    camera.position.set(0, 0, 200);
+    camera.up.set(0, 0, 0);
     camera.lookAt(0, 0, 0);
 
     const scene = new THREE.Scene();
@@ -63,6 +63,10 @@ function main() {
     const jupiterOrbit = new THREE.Object3D();
     const jupiterLocale = new THREE.Object3D();
     let jupiterModel = new THREE.Object3D();
+
+    const saturnOrbit = new THREE.Object3D();
+    const saturnLocale = new THREE.Object3D();
+    let saturnModel = new THREE.Object3D();
 
     function addSunEnvironment() {
 
@@ -120,11 +124,11 @@ function main() {
         marsOrbit.add(marsLocale);
         objects.push(marsLocale);
 
-        const marsMaterial = new THREE.MeshPhongMaterial({color: 0xE27B58, emissive: 0x112244});
-        marsModel = new THREE.Mesh(sphereGeometry, marsMaterial);
-        marsModel.scale.set(.75, .75, .75);
-        marsLocale.add(marsModel);
-        objects.push(marsModel);
+        gltfLoader.load('./resources/Mars_3D_Nasa.glb', (gltf) => {
+            marsModel = gltf.scene;
+            marsModel.scale.set(0.00125, 0.00125, 0.00125);
+            marsLocale.add(marsModel);
+        });
 
         marsLocale.add(deimosOrbit);
         
@@ -180,12 +184,29 @@ function main() {
         jupiterOrbit.add(jupiterLocale);
         objects.push(jupiterLocale);
 
-        const jupiterMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, emissive: 0x112244});
-        jupiterModel = new THREE.Mesh(sphereGeometry, jupiterMaterial);
-        jupiterModel.scale.set(2, 2, 2);
-        jupiterLocale.add(jupiterModel);
-        objects.push(jupiterModel);
+        gltfLoader.load('./resources/Jupiter_3D_Nasa.glb', (gltf) => {
+            jupiterModel = gltf.scene;
+            jupiterModel.scale.set(0.005, 0.005, 0.005);
+            jupiterLocale.add(jupiterModel);
+        });
 
+    }
+
+    function addSaturnEnvironment() {
+
+        solarSystem.add(saturnOrbit);
+        objects.push(saturnOrbit);
+    
+        saturnLocale.position.z = 160;
+        saturnOrbit.add(saturnLocale);
+        objects.push(saturnLocale);
+    
+        gltfLoader.load('./resources/Saturn_3D_Nasa.glb', (gltf) => {
+            saturnModel = gltf.scene;
+            saturnModel.scale.set(0.003, 0.003, 0.003);
+            saturnLocale.add(saturnModel);
+        });
+    
     }
 
     const color = 0xFFFFFF;
@@ -199,6 +220,7 @@ function main() {
     addVenusEnvironment();
     addMercuryEnvironment();
     addJupiterEnvironment();
+    addSaturnEnvironment();
 
     function resizeRendererToDisplaySize(renderer) {
         const canvas = renderer.domElement;
@@ -221,26 +243,29 @@ function main() {
         }
 
         //solarSystem.rotation.x = -time/4;
-        sunModel.rotation.x = -time;
+        sunModel.rotation.y = time;
 
-        earthOrbit.rotation.x = -time/4; 
-        earthModel.rotation.x = -time*4;
+        earthOrbit.rotation.y = time/4; 
+        earthModel.rotation.y = time*4;
 
-        moonOrbit.rotation.x = -time*4;
+        moonOrbit.rotation.y = time*4;
 
-        marsOrbit.rotation.x = -time/6;
-        marsModel.rotation.x = -time*2;
+        marsOrbit.rotation.y = time/6;
+        marsModel.rotation.y = time*2;
 
-        deimosOrbit.rotation.x = -time*3;
+        deimosOrbit.rotation.y = time*3;
 
-        venusOrbit.rotation.x = -time/3; 
-        venusModel.rotation.x = -time*4;
+        venusOrbit.rotation.y = time/3; 
+        venusModel.rotation.y = time*4;
 
-        mercuryOrbit.rotation.x = -time/2;
-        mercuryModel.rotation.x = -time*6;
+        mercuryOrbit.rotation.y = time/2;
+        mercuryModel.rotation.y = time*6;
 
-        jupiterOrbit.rotation.x = -time/10;
-        jupiterModel.rotation.x = -time*6;
+        jupiterOrbit.rotation.y = time/10;
+        jupiterModel.rotation.y = time*6;
+
+        saturnOrbit.rotation.y = time/14;
+        saturnModel.rotation.y = time*6;
 
         renderer.render(scene, camera);
 
