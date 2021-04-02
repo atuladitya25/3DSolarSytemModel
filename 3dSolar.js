@@ -64,9 +64,26 @@ function main() {
     const jupiterLocale = new THREE.Object3D();
     let jupiterModel = new THREE.Object3D();
 
+    const ganymedeOrbit = new THREE.Object3D();
+    let deimosModel = new THREE.Object3D();
+
+    const europaOrbit = new THREE.Object3D();
+    let deimosModel = new THREE.Object3D();
+
     const saturnOrbit = new THREE.Object3D();
     const saturnLocale = new THREE.Object3D();
     let saturnModel = new THREE.Object3D();
+
+    const titanOrbit = new THREE.Object3D();
+    let titanModel = new THREE.Object3D();
+
+    const uranusOrbit = new THREE.Object3D();
+    const uranusLocale = new THREE.Object3D();
+    let uranusModel = new THREE.Object3D();
+
+    const neptuneOrbit = new THREE.Object3D();
+    const neptuneLocale = new THREE.Object3D();
+    let neptuneModel = new THREE.Object3D();
 
     function addSunEnvironment() {
 
@@ -106,11 +123,12 @@ function main() {
 
         earthLocale.add(moonOrbit);
         
-        const moonMaterial = new THREE.MeshPhongMaterial({color: 0x888888, emissive: 0x222222});
-        moonModel = new THREE.Mesh(sphereGeometry, moonMaterial);
-        moonModel.position.z = 5;
-        moonModel.scale.set(.5, .5, .5);
-        moonOrbit.add(moonModel);
+        gltfLoader.load('./resources/Moon_3D_Nasa.glb', (gltf) => {
+            moonModel = gltf.scene;
+            moonModel.scale.set(0.00125, 0.00125, 0.00125);
+            moonOrbit.add(moonModel);
+            moonModel.position.z = 8;
+        });
         objects.push(moonModel);
 
     }
@@ -132,11 +150,13 @@ function main() {
 
         marsLocale.add(deimosOrbit);
         
-        const deimosMaterial = new THREE.MeshPhongMaterial({color: 0xE27B58, emissive: 0x222222});
-        deimosModel = new THREE.Mesh(sphereGeometry, deimosMaterial);
-        deimosModel.position.z = 3;
-        deimosModel.scale.set(.15, .15, .15);
-        deimosOrbit.add(deimosModel);
+        gltfLoader.load('./resources/Deimos_3D_Nasa.glb', (gltf) => {
+            deimosModel = gltf.scene;
+            deimosModel.scale.set(0.025, 0.025, 0.025);   
+            deimosOrbit.add(deimosModel);
+            deimosModel.position.z = 3;
+        });
+
         objects.push(deimosModel);
 
     }
@@ -150,10 +170,11 @@ function main() {
         venusOrbit.add(venusLocale);
         objects.push(venusLocale);
 
-        const venusMaterial = new THREE.MeshPhongMaterial({color: 0x00FF00, emissive: 0x112244});
-        venusModel = new THREE.Mesh(sphereGeometry, venusMaterial);
-        venusModel.scale.set(.8, .8, .8);
-        venusLocale.add(venusModel);
+        gltfLoader.load('./resources/Venus_3D_Nasa.glb', (gltf) => {
+            venusModel = gltf.scene;
+            venusModel.scale.set(0.003, 0.003, 0.003);
+            venusLocale.add(venusModel);
+        });
         objects.push(venusModel);
 
     }
@@ -167,10 +188,11 @@ function main() {
         mercuryOrbit.add(mercuryLocale);
         objects.push(mercuryLocale);
 
-        const mercuryMaterial = new THREE.MeshPhongMaterial({color: 0x0000FF, emissive: 0x112244});
-        mercuryModel = new THREE.Mesh(sphereGeometry, mercuryMaterial);
-        mercuryModel.scale.set(.5, .5, .5);
-        mercuryLocale.add(mercuryModel);
+        gltfLoader.load('./resources/Mercury_3D_Nasa.glb', (gltf) => {
+            mercuryModel = gltf.scene;
+            mercuryModel.scale.set(.0025, .0025, .0025);
+            mercuryLocale.add(mercuryModel);
+        });
         objects.push(mercuryModel);
 
     }
