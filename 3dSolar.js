@@ -17,7 +17,7 @@ function main() {
     const controls = new OrbitControls(camera, canvas);
     controls.update();
 
-    camera.position.set(0, 0, 200);
+    camera.position.set(0, 20, 200);
     camera.up.set(0, 0, 0);
     camera.lookAt(0, 0, 0);
 
@@ -85,6 +85,29 @@ function main() {
     const neptuneLocale = new THREE.Object3D();
     let neptuneModel = new THREE.Object3D();
 
+    function addOrbitalLine(segment = 10, radius) {
+        
+        var lineGeometry = new THREE.BufferGeometry();
+        var vertArray = new Float32Array((segment+1)*3);
+        var angle = 2 * Math.PI / segment;
+        for (var i = 0; i < segment; i++) {
+            var x = radius * Math.cos(angle * i);
+            var y = radius * Math.sin(angle * i);
+            let points = new THREE.Vector3(x, y, 0);
+            vertArray[i*3]=points.x;
+            vertArray[(i*3)+1]=points.y;
+            vertArray[(i*3)+2]=points.z;
+        }
+        vertArray[segment*3]=vertArray[0];
+        vertArray[(segment*3)+1]=vertArray[1];
+        vertArray[(segment*3)+2]=vertArray[2];
+        lineGeometry.setAttribute('position', new THREE.BufferAttribute(vertArray,3));
+        var lineMaterial = new THREE.LineBasicMaterial({ color: 0x111111});
+        var circle = new THREE.Line(lineGeometry, lineMaterial);
+        circle.rotation.x = Math.PI/2;
+        return   circle;
+    }
+
     function addSunEnvironment() {
 
         scene.add(solarSystem);
@@ -110,6 +133,8 @@ function main() {
 
         solarSystem.add(earthOrbit);
         objects.push(earthOrbit);
+
+        earthOrbit.add(addOrbitalLine(60,50));
 
         gltfLoader.load('./resources/Earth_3D_Nasa.glb', (gltf) => {
             earthModel = gltf.scene;
@@ -137,6 +162,8 @@ function main() {
 
         solarSystem.add(marsOrbit);
         objects.push(marsOrbit);
+
+        marsOrbit.add(addOrbitalLine(60,70));
 
         marsLocale.position.z = 70;
         marsOrbit.add(marsLocale);
@@ -166,6 +193,8 @@ function main() {
         solarSystem.add(venusOrbit);
         objects.push(venusOrbit);
 
+        venusOrbit.add(addOrbitalLine(60,35));
+
         venusLocale.position.z = 35;
         venusOrbit.add(venusLocale);
         objects.push(venusLocale);
@@ -184,6 +213,8 @@ function main() {
         solarSystem.add(mercuryOrbit);
         objects.push(mercuryOrbit);
 
+        mercuryOrbit.add(addOrbitalLine(60,20));
+
         mercuryLocale.position.z = 20;
         mercuryOrbit.add(mercuryLocale);
         objects.push(mercuryLocale);
@@ -201,6 +232,8 @@ function main() {
 
         solarSystem.add(jupiterOrbit);
         objects.push(jupiterOrbit);
+
+        jupiterOrbit.add(addOrbitalLine(60,120));
 
         jupiterLocale.position.z = 120;
         jupiterOrbit.add(jupiterLocale);
@@ -236,6 +269,8 @@ function main() {
 
         solarSystem.add(saturnOrbit);
         objects.push(saturnOrbit);
+
+        saturnOrbit.add(addOrbitalLine(60,160));
     
         saturnLocale.position.z = 160;
         saturnOrbit.add(saturnLocale);
@@ -262,6 +297,8 @@ function main() {
 
         solarSystem.add(uranusOrbit);
         objects.push(uranusOrbit);
+
+        uranusOrbit.add(addOrbitalLine(60,190));
       
         uranusLocale.position.z = 190;
         uranusOrbit.add(uranusLocale);
@@ -279,6 +316,8 @@ function main() {
 
         solarSystem.add(neptuneOrbit);
         objects.push(neptuneOrbit);
+
+        neptuneOrbit.add(addOrbitalLine(60,220));
       
         neptuneLocale.position.z = 220;
         neptuneOrbit.add(neptuneLocale);
