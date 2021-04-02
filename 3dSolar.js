@@ -65,10 +65,10 @@ function main() {
     let jupiterModel = new THREE.Object3D();
 
     const ganymedeOrbit = new THREE.Object3D();
-    let deimosModel = new THREE.Object3D();
+    let ganymedeModel = new THREE.Object3D();
 
     const europaOrbit = new THREE.Object3D();
-    let deimosModel = new THREE.Object3D();
+    let europaModel = new THREE.Object3D();
 
     const saturnOrbit = new THREE.Object3D();
     const saturnLocale = new THREE.Object3D();
@@ -212,6 +212,24 @@ function main() {
             jupiterLocale.add(jupiterModel);
         });
 
+        jupiterLocale.add(europaOrbit);
+        
+        gltfLoader.load('./resources/Europa_3D_Nasa.glb', (gltf) => {
+            europaModel = gltf.scene;
+            europaModel.scale.set(0.00125, 0.00125, 0.00125);
+            europaOrbit.add(europaModel);
+            europaModel.position.z = 8;
+        });
+
+        jupiterLocale.add(ganymedeOrbit);
+        
+        gltfLoader.load('./resources/Ganymede_3D_Nasa.glb', (gltf) => {
+            ganymedeModel = gltf.scene;
+            ganymedeModel.scale.set(0.00125, 0.00125, 0.00125);
+            ganymedeOrbit.add(ganymedeModel);
+            ganymedeModel.position.z = 10;
+        });
+
     }
 
     function addSaturnEnvironment() {
@@ -225,11 +243,54 @@ function main() {
     
         gltfLoader.load('./resources/Saturn_3D_Nasa.glb', (gltf) => {
             saturnModel = gltf.scene;
-            saturnModel.scale.set(0.003, 0.003, 0.003);
+            saturnModel.scale.set(0.0035, 0.0035, 0.0035);
             saturnLocale.add(saturnModel);
+        });
+
+        saturnLocale.add(titanOrbit);
+        
+        gltfLoader.load('./resources/Titan_3D_Nasa.glb', (gltf) => {
+            titanModel = gltf.scene;
+            titanModel.scale.set(0.00125, 0.00125, 0.00125);
+            titanOrbit.add(titanModel);
+            titanModel.position.z = 10;
         });
     
     }
+
+    function addUranusEnvironment() {
+
+        solarSystem.add(uranusOrbit);
+        objects.push(uranusOrbit);
+      
+        uranusLocale.position.z = 190;
+        uranusOrbit.add(uranusLocale);
+        objects.push(uranusLocale);
+      
+        gltfLoader.load('./resources/Uranus_3D_Nasa.glb', (gltf) => {
+            uranusModel = gltf.scene;
+            uranusModel.scale.set(0.003, 0.003, 0.003);
+            uranusLocale.add(uranusModel);
+        });
+      
+    }
+
+    function addNeptuneEnvironment() {
+
+        solarSystem.add(neptuneOrbit);
+        objects.push(neptuneOrbit);
+      
+        neptuneLocale.position.z = 220;
+        neptuneOrbit.add(neptuneLocale);
+        objects.push(neptuneLocale);
+      
+        gltfLoader.load('./resources/Neptune_3D_Nasa.glb', (gltf) => {
+            neptuneModel = gltf.scene;
+            neptuneModel.scale.set(0.003, 0.003, 0.003);
+            neptuneLocale.add(neptuneModel);
+        });
+      
+      }
 
     const color = 0xFFFFFF;
     const intensity = 8;
@@ -243,6 +304,8 @@ function main() {
     addMercuryEnvironment();
     addJupiterEnvironment();
     addSaturnEnvironment();
+    addUranusEnvironment();
+    addNeptuneEnvironment();
 
     function resizeRendererToDisplaySize(renderer) {
         const canvas = renderer.domElement;
@@ -286,8 +349,19 @@ function main() {
         jupiterOrbit.rotation.y = time/10;
         jupiterModel.rotation.y = time*6;
 
+        europaOrbit.rotation.y = time*3;
+        ganymedeOrbit.rotation.y = time*2.5;
+
         saturnOrbit.rotation.y = time/14;
         saturnModel.rotation.y = time*6;
+
+        titanOrbit.rotation.y = time*3;
+
+        uranusOrbit.rotation.y = -time/18;
+        uranusModel.rotation.y = -time*6;
+
+        neptuneOrbit.rotation.y = time/21;
+        neptuneModel.rotation.y = time*6;
 
         renderer.render(scene, camera);
 
