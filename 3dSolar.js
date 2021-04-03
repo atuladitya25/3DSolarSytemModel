@@ -85,14 +85,17 @@ function main() {
     const neptuneLocale = new THREE.Object3D();
     let neptuneModel = new THREE.Object3D();
 
+    let asteroidPlane = new THREE.Object3D();
+    let asteroidArr = [];
+
     function addOrbitalLine(segment = 10, radius) {
         
-        var lineGeometry = new THREE.BufferGeometry();
-        var vertArray = new Float32Array((segment+1)*3);
-        var angle = 2 * Math.PI / segment;
+        let lineGeometry = new THREE.BufferGeometry();
+        let vertArray = new Float32Array((segment+1)*3);
+        const angle = 2 * Math.PI / segment;
         for (var i = 0; i < segment; i++) {
-            var x = radius * Math.cos(angle * i);
-            var y = radius * Math.sin(angle * i);
+            let x = radius * Math.cos(angle * i);
+            let y = radius * Math.sin(angle * i);
             let points = new THREE.Vector3(x, y, 0);
             vertArray[i*3]=points.x;
             vertArray[(i*3)+1]=points.y;
@@ -102,10 +105,26 @@ function main() {
         vertArray[(segment*3)+1]=vertArray[1];
         vertArray[(segment*3)+2]=vertArray[2];
         lineGeometry.setAttribute('position', new THREE.BufferAttribute(vertArray,3));
-        var lineMaterial = new THREE.LineBasicMaterial({ color: 0x111111});
-        var circle = new THREE.Line(lineGeometry, lineMaterial);
+        let lineMaterial = new THREE.LineBasicMaterial({ color: 0x111111});
+        let circle = new THREE.Line(lineGeometry, lineMaterial);
         circle.rotation.x = Math.PI/2;
         return   circle;
+    }
+
+    function getCircularPoints(radius) {
+
+        const segment = 25;
+        let vertArray = [];
+        const angle = 2 * Math.PI / segment;
+
+        for (var i = 0; i < segment; i++) {
+            let x = radius * Math.cos(angle * i);
+            let y = radius * Math.sin(angle * i);
+            let z = Math.random()*4; // this will get a number between 1 and 99;
+            z *= Math.round(Math.random()) ? 1 : -1;
+            vertArray.push(new THREE.Vector3(x+(z/2), y+(z/2), z));
+        }
+        return vertArray;
     }
 
     function addSunEnvironment() {
@@ -176,6 +195,7 @@ function main() {
         });
 
         marsLocale.add(deimosOrbit);
+        deimosOrbit.rotation.x = 3;
         
         gltfLoader.load('./resources/Deimos_3D_Nasa.glb', (gltf) => {
             deimosModel = gltf.scene;
@@ -246,6 +266,7 @@ function main() {
         });
 
         jupiterLocale.add(europaOrbit);
+        europaOrbit.rotation.x=Math.PI/8;;
         
         gltfLoader.load('./resources/Europa_3D_Nasa.glb', (gltf) => {
             europaModel = gltf.scene;
@@ -255,7 +276,8 @@ function main() {
         });
 
         jupiterLocale.add(ganymedeOrbit);
-        
+        ganymedeOrbit.rotation.x =Math.PI/8;
+
         gltfLoader.load('./resources/Ganymede_3D_Nasa.glb', (gltf) => {
             ganymedeModel = gltf.scene;
             ganymedeModel.scale.set(0.00125, 0.00125, 0.00125);
@@ -329,6 +351,97 @@ function main() {
             neptuneLocale.add(neptuneModel);
         });
       
+    }
+
+    function addAsteroids() {
+
+        solarSystem.add(asteroidPlane);
+
+        const line1 = getCircularPoints(90);
+        const line2 = getCircularPoints(95);
+        const line3 = getCircularPoints(100);
+      
+        for(let i=0;i<line1.length;i++){
+      
+            let asteroid = Math.floor(Math.random()*3) + 1;
+      
+            switch(asteroid) {
+                case 1: {
+                    gltfLoader.load('./resources/Itokawa_3D_Nasa.glb', (gltf) => {
+                        let asteroidModel = gltf.scene;
+                        asteroidModel.scale.set(0.005, 0.005, 0.005);
+                        asteroidModel.position.set(line1[i].x,line1[i].y,line1[i].z);
+                        asteroidPlane.add(asteroidModel);
+                        asteroidArr.push(asteroidModel);
+                    });
+                    gltfLoader.load('./resources/Vesta_3D_Nasa.glb', (gltf) => {
+                        let asteroidModel = gltf.scene;
+                        asteroidModel.scale.set(0.0003, 0.0003, 0.0003);
+                        asteroidModel.position.set(line2[i].x,line2[i].y,line2[i].z);
+                        asteroidPlane.add(asteroidModel);
+                        asteroidArr.push(asteroidModel);
+                    });
+                    gltfLoader.load('./resources/Phobos_3D_Nasa.glb', (gltf) => {
+                        let asteroidModel = gltf.scene;
+                        asteroidModel.scale.set(0.005, 0.005, 0.005);
+                        asteroidModel.position.set(line3[i].x,line3[i].y,line3[i].z);
+                        asteroidPlane.add(asteroidModel);
+                        asteroidArr.push(asteroidModel);
+                    });
+                    break;
+                }
+                case 2: {
+                  gltfLoader.load('./resources/Vesta_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.0003, 0.0003, 0.0003);
+                    asteroidModel.position.set(line1[i].x,line1[i].y,line1[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                  });
+                  gltfLoader.load('./resources/Phobos_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.005, 0.005, 0.005);
+                    asteroidModel.position.set(line2[i].x,line2[i].y,line2[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                  });
+                  gltfLoader.load('./resources/Itokawa_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.005, 0.005, 0.005);
+                    asteroidModel.position.set(line3[i].x,line3[i].y,line3[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                  });
+                  break;
+              }
+              case 3: {
+                gltfLoader.load('./resources/Phobos_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.005, 0.005, 0.005);
+                    asteroidModel.position.set(line1[i].x,line1[i].y,line1[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                });
+                gltfLoader.load('./resources/Itokawa_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.005, 0.005, 0.005);
+                    asteroidModel.position.set(line2[i].x,line2[i].y,line2[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                });
+                gltfLoader.load('./resources/Vesta_3D_Nasa.glb', (gltf) => {
+                    let asteroidModel = gltf.scene;
+                    asteroidModel.scale.set(0.0003, 0.0003, 0.0003);
+                    asteroidModel.position.set(line3[i].x,line3[i].y,line3[i].z);
+                    asteroidPlane.add(asteroidModel);
+                    asteroidArr.push(asteroidModel);
+                });
+                break;
+            }
+          }
+        }
+
+        asteroidPlane.rotation.x = Math.PI/2;
       }
 
     const color = 0xFFFFFF;
@@ -345,6 +458,7 @@ function main() {
     addSaturnEnvironment();
     addUranusEnvironment();
     addNeptuneEnvironment();
+    addAsteroids();
 
     function resizeRendererToDisplaySize(renderer) {
         const canvas = renderer.domElement;
@@ -355,6 +469,12 @@ function main() {
         renderer.setSize(width, height, false);
         }
         return needResize;
+    }
+
+    let rotationArr = [];
+
+    for(let i=1;i<75;i++){
+        rotationArr.push(Math.random()*2);
     }
 
     function render(time) {
@@ -401,6 +521,13 @@ function main() {
 
         neptuneOrbit.rotation.y = time/21;
         neptuneModel.rotation.y = time*6;
+
+        asteroidPlane.rotation.z = -time/10;
+
+        for(let i=1;i<asteroidArr.length;i++){
+
+            asteroidArr[i].rotation.z = -time*rotationArr[i];
+        }
 
         renderer.render(scene, camera);
 
